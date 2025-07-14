@@ -9,12 +9,12 @@ async function getProjects() : Promise<Project[]> {
         const markdown = await res.text();
         const projectList = JSON.parse(markdown);
         const projects = [];
-        for (let project of projectList) {
+        for (const project of projectList) {
             projects.push(new Project(project));
         }
         return projects;
     }
-    catch (e) {
+    catch {
         console.error("Error loading projects");
         return [];
     }

@@ -1,5 +1,4 @@
 import { MDXRemote } from 'next-mdx-remote/rsc'
-import withToc from "@stefanprobst/rehype-extract-toc"
 import './project.css'
 
 const markdownUrlBase = "https://portfoliomarkdown.s3.us-east-2.amazonaws.com/";
