@@ -1,16 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Saira } from "next/font/google";
 import "./globals.css";
+import Nav from "../components/nav";
+import SubHeading from "@/components/subHeading";
+import Link from 'next/link'
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const saira = Saira({
+  weight: "400",
+})
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -25,9 +22,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${saira.className} antialiased h-screen`}
       >
-        {children}
+        <div className="p-8 pb-20 gap-16 sm:p-20 relative h-full">
+          <h1 className="text-9xl drop-shadow-md"><Link href="/">James Cooper</Link></h1>
+          <SubHeading />
+          <Nav/>
+          <main className="h-full w-full">
+            {children}
+          </main>
+        </div>
       </body>
     </html>
   );

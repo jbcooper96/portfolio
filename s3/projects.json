@@ -1,0 +1,14 @@
+[
+    {
+        "name": "Whiteboard",
+        "description": "built with Electron.js to support cross-platform compatibility and React.js for rendering the user interface. Whiteboard features a rich-text WYSIWYG (What You See Is What You Get) editor and basic drawing functionality, implemented using the HTML5 Canvas API. My goal is to create an intuitive, flexible note-taking experience that bridges structured text and freeform sketching.",
+        "imgUrl": "/icon.png",
+        "urlName": "whiteboard"
+    },
+    {
+        "name": "Pong Reinforcement Learning",
+        "description": "from-scratch implementations of reinforcement learning algorithms, including Deep Q Networks (DQN) and Proximal Policy Optimization (PPO), applying them to train AI agents to play Pong",
+        "imgUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYoKWWbbfTOBh8tw3rN-J2M5OzVUI0-ItHUg&s",
+        "urlName": "pongreinforcementlearning"
+    }
+]

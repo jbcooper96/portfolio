@@ -1,0 +1,121 @@
+
+<video width="100%" tyle={{objectFit: "fill"}} autoPlay muted loop>
+	<source src="https://portfoliomarkdown.s3.us-east-2.amazonaws.com/WhiteboardDemo1.mp4" type="video/mp4"/>
+</video>
+
+
+# Whiteboard - A Cross-Platform Note-Taking App 
+
+Whiteboard is a lightweight, cross-platform note-taking application built with Electron.js. 
+It helps you stay organized with resizable sticky notes and an intuitive line-drawing tool to visualize your thoughts. 
+Whether you’re brainstorming, sketching ideas, or jotting down quick notes, Whiteboard provides a seamless and flexible 
+experience.
+
+# Implementation Details
+
+The user interface is built using React for state and DOM management, the rich text WYSIWYG(what you see is what you get) editor
+features are built on top of a library called Slate, and the line-drawing/editing features are built directly on top of Html5 canvas.
+I will detail the overall architecture as well as some interesting implementation intricacies below:
+
+## Board Component
+
+The main component of interest is the Board component. There are two major state variables "Lines" and "Stickers", a list of Line
+objects and Sticker objects respectively, each managed by their own reducers. 
+
+<img src="https://portfoliomarkdown.s3.us-east-2.amazonaws.com/WhiteboardClassDiagram1.png"/>
+
+As shown above, both the line and sticker objects feature X and Y coordinates denoting their location on the board with the 
+(0, 0) point being the top left corner; the line object's coordinates are broken up into start and end locations. There is also
+a type attribute as stickers can styled as regular stickers(shown above), tables, or text boxes and lines can be either directional 
+or non-directional.
+
+A large portion of the board logic is devoted to event handling, specifically the mouse move and mouse up events as they are needed
+to drag or resize stickers and to draw or edit lines. To keep things clean in the Board component the logic for handling these
+events lives in seperate event handlers for each way of interacting with the board (drawing, draggings stickers, etc..), all sharing 
+a common interface.
+
+<img src="https://portfoliomarkdown.s3.us-east-2.amazonaws.com/WhiteboardEventDiagram.png"/>
+
+The EventHandlersManager class lives in the Board component and the Board component calls the startDrawing, startDragging, editLine,
+resizeSticker, or createAndResizeSticker methods when the user begins the respective action. The EventHandlersManager then
+creates the correct EventHandler for the action and assigns it to its eventManager attribute. Now the Board component can just call the
+mouseUp and mouseMove methods on the EventHandlersManager in its respective event handler functions and the EventHandlersManager delegates to 
+the correct EventHandler. The event handlers can then update the edited sticker or line position directly because they have a 
+reference to the Stickers and Lines state variables, passed to them in the BoardEvent object.
+
+## Canvas Component
+
+```js
+export default function Canvas({ lines, ref, eventManager }) {
+    const canvas = useRef(null);
+
+    useEffect(() => {
+        redraw();
+    }, [lines]);
+
+    useImperativeHandle(ref, () => {
+        return {
+            getBoundingClientRect: () => {
+                return canvas.current.getBoundingClientRect();
+            },
+            drawCircle: (x, y, radius) => {
+                drawCircle(x, y, radius);
+            },
+            drawLine: (line) => {
+                drawLine(line);
+            },
+            redraw: () => {
+                redraw();
+            }
+        }
+    }, [canvas, lines]);
+
+    const drawCircle = (x, y, radius) => {
+        const ctx = canvas.current.getContext("2d");
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, 2 * Math.PI);
+        ctx.stroke();
+    }
+
+    const drawLine = (line) => {
+        const [arrowPoint1, arrowPoint2] = CanvisLogicHandler.getArrowPointsForLine(line);
+        const ctx = canvas.current.getContext("2d");
+        ctx.beginPath();
+        ctx.moveTo(line.start.x, line.start.y);
+        ctx.lineTo(line.end.x, line.end.y);
+        if (line.type === LineTypes.ARROW) {
+            ctx.lineTo(arrowPoint1.x, arrowPoint1.y);
+            ctx.lineTo(line.end.x, line.end.y);
+            ctx.lineTo(arrowPoint2.x, arrowPoint2.y);
+        }
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = line.hover ? LINE_COLOR_HOVER : LINE_COLOR;
+        ctx.stroke();
+    }
+
+    const redraw = () => {
+        if (canvas.current) {
+            const ctx = canvas.current.getContext("2d");
+            ctx.clearRect(0, 0, canvas.current.width, canvas.current.height);
+            for (let line of lines) {
+                drawLine(line);
+                if (eventManager.eventHandler.lineBeingEditiedId !== undefined && line.id === eventManager.eventHandler.lineBeingEditiedId) {
+                    let point = eventManager.eventHandler.linePointBeingEdited === LinePoint.START ? line.start : line.end;
+                    drawCircle(point?.x, point?.y, LINE_POINT_EDIT_CIRCLE_RADIUS);
+                }
+            }
+        }
+    }
+
+    return (<canvas height="1000" width="2000" ref={canvas} />);
+}
+```
+
+The HTML5 canvas is wrapped in a component, fittingly called Canvas, with the Lines state variable from the Board component passed
+as a prop. It has a function drawLine to draw a line, a function drawCircle to draw a circle (used for some hover mechanics with the lines that I'll touch on later),
+and a function redraw to clear the canvas and redraw all the lines. I use useEffect with the lines prop as a dependency to call
+redraw every time there is a change to lines list.
+
+
+
+
