@@ -17,15 +17,15 @@ export default function Home() {
       <h2 className="text-2xl">Recent Project: NutriAI</h2>
 
       <p>
-        I've been working on a mobile application that levarages ChatGPT's reasoning abilities
-        and react native to build custom mealplans tailored to the user's selected dietary preferences.
+        I&lsquo;ve been working on a mobile application that levarages ChatGPT&lsquo;s reasoning abilities
+        and react native to build custom mealplans tailored to the user&lsquo;s selected dietary preferences.
         Featuring an instacart integration, NutriAI makes mealplanning and grocery shopping a breeze. 
       </p>
 
       <h2>Always Learning & Innovating</h2>
 
       <p>
-        I'm always diving into new technologies and refining my craft. Whether it's optimizing
+        I&lsquo;m always diving into new technologies and refining my craft. Whether it&lsquo;s optimizing
         UI performance, streamlining backend logic, or experimenting with new frameworks,
         I love the challenge of turning ideas into reality.
       </p>
