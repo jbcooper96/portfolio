@@ -3,4 +3,5 @@ export default interface Workspace {
     bulletPoints?: string[];
     timePeriod?: string;
     title: string;
+    animation?: string;
 }
