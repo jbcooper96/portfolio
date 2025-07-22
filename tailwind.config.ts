@@ -22,19 +22,19 @@ export default {
           'to': {marginLeft: '0%'}
         },
         slideRightTag: {
-          'from': { translate: '-60 0', opacity: "0%"},
+          'from': { translate: '-60px 0', opacity: "0%"},
           'to': { translate: '0 0', opacity: "100%"}
         },
         slideLeftTag: {
-          'from': { translate: '60 0', opacity: "0%"},
+          'from': { translate: '60px 0', opacity: "0%"},
           'to': { translate: '0 0', opacity: "100%"}
         },
         slideDownTag: {
-          'from': { translate: '0 -60', opacity: "0%"},
+          'from': { translate: '0 -60px', opacity: "0%"},
           'to': {translate: '0 0', opacity: "100%"}
         },
         slideUpTag: {
-          'from': { translate: '0 60', opacity: "0%"},
+          'from': { translate: '0 60px', opacity: "0%"},
           'to': { translate: '0 0', opacity: "100%"}
         }
       },
