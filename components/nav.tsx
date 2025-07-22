@@ -21,7 +21,7 @@ export default function Nav() {
     const pathname = usePathname();
 
     return (
-        <div className="grid grid-cols-4 gap-4 border-b mt-10 mb-10 text-center">
+        <div className="grid grid-cols-4 gap-2 border-b mt-4 mb-2 text-center">
             <div className="border-r border-l grid" >
                 <Link className={getClassname(pathname, "projects")} href="/projects">Projects</Link>
             </div>

@@ -13,7 +13,8 @@ export default {
         foreground: "var(--foreground)",
         primary: "#444444",
         secondary: "#1f1d3a",
-        accent: "#498972"
+        accent: "#498972",
+        accent_hover: "#5cad91"
       },
       keyframes: {
         slideRight: {

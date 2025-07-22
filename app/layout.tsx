@@ -25,11 +25,11 @@ export default function RootLayout({
       <body
         className={`${saira.className} antialiased h-screen`}
       >
-        <div className="p-8 pb-20 gap-16 sm:p-20 relative h-full">
-          <h1 className="text-9xl drop-shadow-md"><Link href="/">James Cooper</Link></h1>
+        <div className="md:px-24 py-4 md:gap-8 px-4 gap-4 h-full flex flex-col inline-block">
+          <h1 className="text-6xl md:text-9xl drop-shadow-md"><Link href="/">James Cooper</Link></h1>
           <SubHeading />
           <Nav/>
-          <main className="h-full w-full">
+          <main className="flex-grow overflow-y-auto flex-1">
             {children}
           </main>
         </div>
