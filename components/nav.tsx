@@ -2,8 +2,8 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-const CLASS_NAME = "transition delay-75 duration-200 ease-in-out hover:scale-110 hover:-translate-y-1 hover:font-medium";
-const CLASS_NAME_SELECTED = "font-bold underline";
+const CLASS_NAME = "transition delay-75 duration-200 ease-in-out hover:scale-110 hover:-translate-y-1 hover:font-medium text-sm md:test-base";
+const CLASS_NAME_SELECTED = "font-bold underline text-sm md:test-base";
 
 function getPage(pathname: string): string {
     const pathnameSplit = pathname.split("/");

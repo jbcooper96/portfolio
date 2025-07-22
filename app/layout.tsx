@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${saira.className} antialiased h-screen`}
+        className={`${saira.className} antialiased h-dvh`}
       >
         <div className="md:px-24 py-4 md:gap-8 px-4 gap-4 h-full flex flex-col inline-block">
           <h1 className="text-6xl md:text-9xl drop-shadow-md"><Link href="/">James Cooper</Link></h1>
