@@ -1,13 +1,8 @@
 "use client"
 
-import { useState, useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { useChat } from '@ai-sdk/react';
 
-interface Message {
-    id: number;
-    text: string;
-    isUser: boolean;
-}
 
 const firstMessage = "Hello, \n I am an ai resume assistant. Ask me questions about James Cooper and find if he would be a good fit for your role."
 
