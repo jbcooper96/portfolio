@@ -1,138 +1,99 @@
 "use client"
 
 import { useState, useRef, useEffect } from 'react';
-import { useChat } from '@ai-sdk/react'; 
+import { useChat } from '@ai-sdk/react';
 
 interface Message {
-  id: number;
-  text: string;
-  isUser: boolean;
+    id: number;
+    text: string;
+    isUser: boolean;
 }
 
 const firstMessage = "Hello, \n I am an ai resume assistant. Ask me questions about James Cooper and find if he would be a good fit for your role."
 
 export default function AiAssistant() {
-  const [allMessages, setAllMessages] = useState<Message[]>([
-    {
-      id: 1,
-      text: "Hello! I'm your AI assistant. How can I help you today?",
-      isUser: false
+    const chatRef = useRef<HTMLDivElement | null>(null);
+    const formRef = useRef<HTMLFormElement | null>(null);
+    const { messages, input, handleInputChange, handleSubmit, status } =
+        useChat({ api: '/api/chat' });
+
+    useEffect(() => {
+        scrollDown();
+    }, [messages, chatRef])
+
+    const scrollDown = () => {
+        chatRef.current?.scrollTo({
+            top: chatRef.current.scrollHeight,
+            behavior: 'smooth'
+        })
     }
-  ]);
-  const [inputText, setInputText] = useState('');
-  const chatRef = useRef<HTMLDivElement | null>(null);
-  const formRef = useRef<HTMLFormElement | null>(null);
-  const { messages, input, handleInputChange, handleSubmit, status } =
-    useChat({ api: '/api/chat' });
 
-  useEffect(() => {
-    scrollDown();
-  }, [messages, chatRef])
 
-  const scrollDown = () => {
-    chatRef.current?.scrollTo({
-        top: chatRef.current.scrollHeight,
-        behavior: 'smooth'
-      })
-}
 
-  const handleSendMessage = () => {
-    if (inputText.trim() === '') return;
-
-    const newUserMessage: Message = {
-      id: allMessages.length + 1,
-      text: inputText,
-      isUser: true
+    const handleKeyPress = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter' && !e.shiftKey && !submitDisabled()) {
+            e.preventDefault();
+            handleSubmit();
+        }
     };
 
-    
-
-    // Add user message immediately
-    setAllMessages(prev => [...prev, newUserMessage]);
-    setInputText('');
-
-    // Add AI response after a short delay to simulate thinking
-    setTimeout(() => {
-      const mockAiResponse: Message = {
-        id: allMessages.length + 2,
-        text: "This is a mock response. The AI assistant is not yet connected to any backend service.",
-        isUser: false
-      };
-      setAllMessages(prev => [...prev, mockAiResponse]);
-    }, 1000);
-  };
-
-  const sub = (e?: {
-    preventDefault?: () => void;
-}, chatRequestOptions?: any) => {
-    handleSubmit(e);
-  }
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey && !submitDisabled()) {
-      e.preventDefault();
-      sub();
+    const submitDisabled = () => {
+        return status !== 'ready' || !input
     }
-  };
 
-  const submitDisabled = () => {
-    return status !== 'ready' || !input
-  }
- 
-  return (
-    <div className="flex flex-col h-full">
-      <div ref={chatRef} className="flex-1 flex-grow overflow-y-auto mb-4 rounded-lg p-4 border-x border-1px border-x-primary">
-        <div className="space-y-4">
-        <div
-              key="fistMessage"
-              className={`flex 'justify-start'}`}
-            >
-              <div
-                className="max-w-xs lg:max-w-md px-4 py-2 rounded-lg bg-primary shadow-sm"
-              >
-                <p className="text-sm m-2 indent-0">{firstMessage}</p>
-              </div>
+    return (
+        <div className="flex flex-col h-full">
+            <div ref={chatRef} className="flex-1 flex-grow overflow-y-auto mb-4 rounded-lg p-4 border-x border-1px border-x-primary">
+                <div className="space-y-4">
+                    <div
+                        key="fistMessage"
+                        className={`flex 'justify-start'}`}
+                    >
+                        <div
+                            className="max-w-xs lg:max-w-md px-4 py-2 rounded-lg bg-primary shadow-sm"
+                        >
+                            <p className="text-sm m-2 indent-0">{firstMessage}</p>
+                        </div>
+                    </div>
+                    {messages.map((message) => (
+                        <div
+                            key={message.id}
+                            className={`flex ${message.role == "user" ? 'justify-end' : 'justify-start'}`}
+                        >
+                            <div
+                                className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${message.role == "user"
+                                        ? 'bg-accent text-white'
+                                        : 'bg-primary shadow-sm'
+                                    }`}
+                            >
+                                <p className="text-sm m-2 indent-0">{message.content}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
-          {messages.map((message) => (
-            <div
-              key={message.id}
-              className={`flex ${message.role == "user" ? 'justify-end' : 'justify-start'}`}
-            >
-              <div
-                className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
-                  message.role == "user"
-                    ? 'bg-accent text-white'
-                    : 'bg-primary shadow-sm'
-                }`}
-              >
-                <p className="text-sm m-2 indent-0">{message.content}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
 
-      <div className="p-10">
-        <div>
-            <form className="flex gap-2" ref={formRef} onSubmit={sub}>
-                <textarea
-                    value={input}
-                    onChange={handleInputChange}
-                    onKeyDown={handleKeyPress}
-                    placeholder="Type your message here..."
-                    className="flex-1 p-3 border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-600"
-                    rows={3}
-                />
-                <button
-                    type="submit"
-                    disabled={submitDisabled()}
-                    className="px-6 py-3 bg-accent text-white rounded-lg hover:bg-accent_hover transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                    Send
-                </button>
-            </form>
+            <div className="p-10">
+                <div>
+                    <form className="flex gap-2" ref={formRef} onSubmit={handleSubmit}>
+                        <textarea
+                            value={input}
+                            onChange={handleInputChange}
+                            onKeyDown={handleKeyPress}
+                            placeholder="Type your message here..."
+                            className="flex-1 p-3 border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-600"
+                            rows={3}
+                        />
+                        <button
+                            type="submit"
+                            disabled={submitDisabled()}
+                            className="px-6 py-3 bg-accent text-white rounded-lg hover:bg-accent_hover transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                            Send
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 }
