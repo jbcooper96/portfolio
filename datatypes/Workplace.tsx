@@ -4,4 +4,5 @@ export default interface Workspace {
     timePeriod?: string;
     title: string;
     animation?: string;
+    animationTime?: number;
 }

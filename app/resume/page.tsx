@@ -3,7 +3,8 @@ import Workspace from "../../datatypes/Workplace"
 import ResumeWorkplace from "../../components/resumeWorkplace"
 import Chip from '@mui/material/Chip';
 import Paper from '@mui/material/Paper';
-import Theme from "../../theme/Theme"
+import Theme from "../../theme/Theme";
+
 
 const workplaces: Workspace[] = [
     {
@@ -17,8 +18,8 @@ const workplaces: Workspace[] = [
             "Proactively identified system performance improvements and security enhancements, delivering higher efficiency and client satisfaction"
         ],
         timePeriod: "2019 - 2024",
-        animation: "animate-slide-up-tag"
-
+        animation: "animate-slide-right-tag",
+        animationTime: 2000
     },
     {
         name: "Kent State",
@@ -28,7 +29,8 @@ const workplaces: Workspace[] = [
             "Refactored legacy applications for improved performance and maintainability, reducing page load times and simplifying future updates"
         ],
         timePeriod: "2017 - 2019",
-        animation: "animate-slide-up-tag-5"
+        animation: "animate-slide-up-tag-5",
+        animationTime: 5000
     }
 ]
 
@@ -50,7 +52,7 @@ export default function Resume() {
                 justifyContent: 'left',
                 flexWrap: 'wrap',
                 listStyle: 'none',
-                backgroundColor: "black",
+                backgroundColor: Theme.background,
                 p: 0.5,
                 m: 1,
             }}
@@ -59,18 +61,14 @@ export default function Resume() {
                 {skills.map(skill => {
                     return (
                     <li key={skill.label}>
-                        <Chip className={skill.animation} sx={{backgroundColor: "black", color: "white", borderColor: Theme.accent, margin: .5}} label={skill.label} variant="outlined" />
+                        <Chip className={skill.animation} sx={{backgroundColor: Theme.background, color: Theme.foreground, borderColor: Theme.accent, margin: .5}} label={skill.label} variant="outlined" />
                     </li>
                     )
                 })}
                 
             </Paper>
             <h2 className="text-2xl mt-10 mb-5">Experience</h2>
-            {workplaces.map(workplace => {
-                return (
-                    <ResumeWorkplace key={workplace.title} workplace={workplace}/>
-                )
-            })}
+            {workplaces.map(workplace => <ResumeWorkplace key={workplace.title} workplace={workplace}/>)}
         </div>
     )
 }

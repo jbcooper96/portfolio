@@ -25,6 +25,10 @@ export default {
           'from': { translate: '-60px 0', opacity: "0%"},
           'to': { translate: '0 0', opacity: "100%"}
         },
+        slideRightWorkplace: {
+          'from': { left: '-60px', opacity: "0%", position: "fixed"},
+          'to': { left: '0px', opacity: "100%", position: "fixed"}
+        },
         slideLeftTag: {
           'from': { translate: '60px 0', opacity: "0%"},
           'to': { translate: '0 0', opacity: "100%"}
@@ -45,7 +49,8 @@ export default {
         'slide-left-tag': 'slideLeftTag 4s cubic-bezier(0.2, 0.8, 0.2, 1)',
         'slide-down-tag': 'slideDownTag 2s cubic-bezier(0.2, 0.8, 0.2, 1)',
         'slide-up-tag': 'slideUpTag 2s cubic-bezier(0.2, 0.8, 0.2, 1)',
-        'slide-up-tag-5': 'slideUpTag 5s cubic-bezier(0.2, 0.8, 0.2, 1)'
+        'slide-up-tag-5': 'slideUpTag 5s cubic-bezier(0.2, 0.8, 0.2, 1)',
+        'slide-right-workplace': 'slideRightWorkplace 2s cubic-bezier(0.2, 0.8, 0.2, 1)',
       }
     },
   },
