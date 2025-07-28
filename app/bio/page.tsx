@@ -7,13 +7,11 @@ export default async function Bio() {
     try {
         const res = await fetch(markdownUrl);
         const markdown = await res.text();
-        console.log(markdown)
         return (
             <MDXRemote source={markdown} />
         )
     }
-    catch (error) {
-        console.log(error)
+    catch {
         return (<div></div>)
     }
     

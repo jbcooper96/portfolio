@@ -119,8 +119,8 @@ export default function AiAssistant() {
                     ))}
                 </div>
             </div>
-
-            <div className="p-10">
+            {keyboardOpen && <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-10 md:hidden"></div>}
+            <div className="p-10 relative z-20">
                 <div>
                     <form className="flex gap-2" ref={formRef} onSubmit={handleSubmit}>
                         <textarea
