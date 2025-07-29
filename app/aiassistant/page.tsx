@@ -36,6 +36,7 @@ export default function AiAssistant() {
 
     const updateKbOffset = () => {
         if (textFocused.current) {
+            console.log(window.screenTop)
             window.scrollTo({
                 top: 0
               });

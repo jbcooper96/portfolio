@@ -3,10 +3,14 @@ import { ScrollContext, ScrollProvider } from '../contexts/scrollContext';
 import React, { useCallback } from 'react'
 import { useRef, useContext, useEffect, useState } from "react"
 import { usePathname } from 'next/navigation'
+import { motion } from 'framer-motion';
 
 const checkIsMobile = () => {
     return ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 }
+
+const HOME_MAIN_CLASS = "flex flex-row w-[500%] overflow-y-hidden";
+const SCROLL_TIME = 250
 
 function ScrollWrapperInner({
     children,
@@ -16,7 +20,8 @@ function ScrollWrapperInner({
     const { setScrollDepth } = useContext(ScrollContext);
     const main = useRef<HTMLElement | null>(null);
     const pathname = usePathname();
-    const [ mainClassname, setMainClassname ] = useState("flex flex-row overflow-x-hidden snap-x w-full overflow-y-hidden");
+    const [ mainClassname, setMainClassname ] = useState(HOME_MAIN_CLASS);
+    const [ scrollX, setScrollX ] = useState(0);
 
     const isHomepage = useCallback(() => pathname === "/", [pathname]);
 
@@ -25,8 +30,6 @@ function ScrollWrapperInner({
             let currentSlide = 0;
             const totalSlides = 5; // Hero, Skills, Experience, Footer
             let scrolledLast: number = 0;
-            let scrolledLastTry: number = 0;
-            const isMobile = checkIsMobile();
             let scrollingMobile = false;
             const mobileScrollPos = {x: 0, y: 0, id: 0};
             let wheelStopped = true;
@@ -36,43 +39,27 @@ function ScrollWrapperInner({
             const scrollToSlide = (slideIndex: number) => {
                 if (main.current) {
                     wheelStopped = false;
-                    const slideWidth = window.innerWidth;
+                    const slideWidth = main.current.clientWidth/totalSlides;
                     const targetPosition = slideIndex * slideWidth;
-                    const leftBefore = main.current.scrollLeft
-                    main.current.scrollBy({left: (targetPosition - leftBefore)/5, behavior: "smooth"})
+                    setScrollX(-targetPosition);
                     stillScrolling = true;
                     setTimeout(() => {
                         stillScrolling = false;
-                        if (scrolledLastTry - Date.now() < 40 || isMobile) {
-                            main.current?.scrollTo({
-                                left: targetPosition,
-                                behavior: 'smooth',
-                            });
-                        }
-                        else {
-                            wheelStopped = true;
-                            main.current?.scrollTo({
-                                left: leftBefore,
-                                behavior: 'smooth'
-                            });
-                        }
-                        
-                    }, 40)
-                    
+                    }, SCROLL_TIME);
                 }
             };
+
             let wheelStopTimer: NodeJS.Timeout;
-            const wheelStopDelay = 40
+            const wheelStopDelay = 80
             
             const handleWheel = (e: WheelEvent) => {
-                e.preventDefault();
                 if (wheelStopTimer)
                     clearTimeout(wheelStopTimer);
 
                 wheelStopTimer = setTimeout(() => {
+                    console.log("STOP")
                     wheelStopped = true;
                 }, wheelStopDelay);
-                scrolledLastTry = Date.now();
                 
                 if (!wheelStopped) scrolledLast = Date.now();
                 if ((Date.now() - scrolledLast > 100 && wheelStopped && !stillScrolling) || !isHomepage()) {
@@ -107,12 +94,10 @@ function ScrollWrapperInner({
                             const deltaX = touch.clientX - mobileScrollPos.x;
                             const delta = Math.abs(deltaY) < Math.abs(deltaX) ? deltaX : deltaY;
                             if (delta < -scrollCutoff) {
-                                // Scrolling down - move to next slide
                                 currentSlide = Math.min(currentSlide + 1, totalSlides - 1);
                                 scrollToSlide(currentSlide);
                                 scrollingMobile = false;
                             } else if (delta > scrollCutoff) {
-                                // Scrolling up - move to previous slide
                                 currentSlide = Math.max(currentSlide - 1, 0);
                                 scrollToSlide(currentSlide);
                                 scrollingMobile = false;
@@ -163,7 +148,6 @@ function ScrollWrapperInner({
             window.addEventListener("touchstart", handleTouchDown, {passive: false});
             window.addEventListener("touchmove", handleTouchMove, {passive: false});
             window.addEventListener("touchend", handletouchEnd);
-            
             return () => {
                 window.removeEventListener("wheel", handleWheel);
                 window.removeEventListener("keydown", handleKeyDown);
@@ -176,7 +160,7 @@ function ScrollWrapperInner({
 
     useEffect(() => {
         const mainClassnameNew = isHomepage() 
-            ? `flex flex-row overflow-x-hidden snap-x w-full ${checkIsMobile()? "" : "snap-mandatory "}overflow-y-hidden`
+            ? HOME_MAIN_CLASS
             : "flex-grow flex-1 overflow-y-scroll";
         setMainClassname(mainClassnameNew);
     }, [pathname, isHomepage]);
@@ -186,6 +170,9 @@ function ScrollWrapperInner({
             if (!isHomepage()) {
                 e.stopPropagation();
                 setScrollDepth(main.current.scrollTop);
+            }
+            else if (checkIsMobile()) {
+                main.current.scrollLeft = 0;
             }
         }
     };
@@ -199,9 +186,14 @@ function ScrollWrapperInner({
     return (
         <React.Fragment>
             <div id="wrapper" className="relative"></div>
-            <main ref={main} className={mainClassname} onScroll={handleScroll} onWheel={handleWheelMain}>
+            {isHomepage() ?
+            <motion.main animate={{ x: scrollX }} onScroll={handleScroll} transition={{ type: "spring",  stiffness: 50, duration: SCROLL_TIME }} ref={main} className={mainClassname}>
                 {children}
-            </main>
+            </motion.main>
+            : <main ref={main} className={mainClassname} onScroll={handleScroll} onWheel={handleWheelMain}>
+                {children}
+            </main>}
+
         </React.Fragment>
     )
 }

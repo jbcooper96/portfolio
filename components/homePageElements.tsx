@@ -10,11 +10,11 @@ const slideIn = {
 
 export function Hero() {
     return (
-        <div className="shrink-0 basis-full snap-start">
+        <div className="shrink-0 basis-1/5">
             <motion.section
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: false }}
+                viewport={{ once: true }}
                 variants={slideIn}
                 transition={{ duration: 1.2, ease: 'easeOut' }}
                 className="flex flex-col items-center text-center inline-block"
@@ -51,11 +51,11 @@ export function Skills() {
 
 
     return (
-        <div className="shrink-0 basis-full snap-start">
+        <div className="shrink-0 basis-1/5">
             <section className="max-w-4xl mx-auto p-20 inline-block flex flex-col items-center text-center inline-block">
                 <h2 className="text-3xl font-semibold mb-8">What I Do</h2>
 
-                <motion.ul initial="hidden" whileInView="visible" variants={list} viewport={{ once: false }}>
+                <motion.ul initial="hidden" whileInView="visible" variants={list} viewport={{ once: true }}>
                     {skills.map((skill, idx) => (
                         <motion.li key={idx} variants={item} transition={{ duration: 1.2 }} className="text-lg text-gray-300">
                             {skill}
@@ -97,7 +97,7 @@ export function Experience() {
 
     return (
         <React.Fragment>
-            <div className="shrink-0 basis-full snap-start px-30">
+            <div className="shrink-0 basis-1/5 md:px-40 px-5">
                 <section className="bg-secondary py-5 inline-block flex flex-col items-center text-center inline-block">
                     <div className="max-w-4xl mx-auto">
                         <h2 className="text-3xl font-semibold mb-8">Where I&apos;ve Worked</h2>
@@ -107,7 +107,7 @@ export function Experience() {
                                     key={idx}
                                     initial="hidden"
                                     whileInView="visible"
-                                    viewport={{ once: false }}
+                                    viewport={{ once: true }}
                                     variants={slideIn}
                                     transition={{ duration: 1.2, delay: idx * 0.15 }}
                                 >
@@ -121,7 +121,7 @@ export function Experience() {
                     </div>
                 </section>
             </div>
-            <div className="shrink-0 basis-full snap-start px-30">
+            <div className="shrink-0 basis-1/5 md:px-40 px-5">
                 <section className="bg-secondary py-5 inline-block flex flex-col items-center text-center inline-block">
                     <div className="max-w-4xl mx-auto">
                         <h2 className="text-3xl font-semibold mb-8">What I&apos;ve been doing lately</h2>
@@ -131,7 +131,7 @@ export function Experience() {
                                     key={idx}
                                     initial="hidden"
                                     whileInView="visible"
-                                    viewport={{ once: false }}
+                                    viewport={{ once: true }}
                                     variants={slideIn}
                                     transition={{ duration: 1.2, delay: idx * 0.15 }}
                                 >
@@ -151,17 +151,17 @@ export function Experience() {
 
 export function Footer() {
     return (
-        <div className="shrink-0 basis-full snap-start">
+        <div className="shrink-0 basis-1/5">
             <motion.footer
                 initial={{ opacity: 0, x: 100 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: false }}
+                viewport={{ once: true }}
                 transition={{ duration: 1.2 }}
                 className="text-center py-20 px-4 inline-block flex flex-col items-center text-center inline-block"
             >
                 <h2 className="text-2xl font-semibold mb-4">Let’s build something great together.</h2>
-                <motion.a whileHover={{ scale: 1.05 }} href="mailto:you@example.com"
-                    className="inline-block bg-indigo-600 text-white px-6 py-3 rounded hover:bg-indigo-500"
+                <motion.a whileHover={{ scale: 1.05 }} href="mailto:jbcoope44@gmail.com"
+                    className="inline-block bg-accent text-white px-6 py-3 rounded hover:bg-accent_hover"
                 >
                     Get in Touch
                 </motion.a>
