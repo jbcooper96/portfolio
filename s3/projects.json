@@ -9,6 +9,6 @@
         "name": "Pong Reinforcement Learning",
         "description": "from-scratch implementations of reinforcement learning algorithms, including Deep Q Networks (DQN) and Proximal Policy Optimization (PPO), applying them to train AI agents to play Pong",
         "imgUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYoKWWbbfTOBh8tw3rN-J2M5OzVUI0-ItHUg&s",
-        "urlName": "pongreinforcementlearning"
+        "urlName": "pong"
     }
 ]

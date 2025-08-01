@@ -32,6 +32,9 @@ export default async function Page({
         
         const markdown = await res.text();
         
+        console.log(markdown)
+
+
         // Validate that we have content
         if (!markdown || markdown.trim().length === 0) {
             console.error('Empty markdown content received');

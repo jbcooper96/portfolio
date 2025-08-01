@@ -18,3 +18,10 @@ p {
   margin: 2rem;
   text-indent: 2rem;
 }
+
+video.pong {
+  margin: 15px;
+  margin-left: auto;
+  margin-right: auto;
+  height: 25rem !important;
+}
